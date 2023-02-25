@@ -1,0 +1,30 @@
+version: '3.9'
+
+name: tasksapp-compose
+
+services:
+
+  mongo:
+    image: mongo:5.0.15
+    container_name: tasksapp_mongo
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - tasksapp_data_mongo:/data/db
+
+  cache:
+    image: redis:7.0.8-alpine
+    container_name: tasksapp_redis
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+      - tasksapp_cache:/data
+
+volumes:
+  tasksapp_data_mongo:
+    driver: local
+  tasksapp_cache:
+    driver: local
